@@ -5,18 +5,20 @@ import React, { useState } from 'react';
 
 
   interface DropDownProps  {
-    data:any
+    data:any,
+    value:any,
+    setValue:any
    
 
   }
   
   const DropDown : React.FC<DropDownProps> = props => {
  
-    const [value, setValue] = useState(null);
+   
     const [isFocus, setIsFocus] = useState(false);
 
     const renderLabel = () => {
-      if (value || isFocus) {
+      if (props.value || isFocus) {
         return (
           <Text style={[styles.label, isFocus && { color: 'blue' }]}>
             Select Branch
@@ -42,11 +44,11 @@ import React, { useState } from 'react';
           valueField="value"
           placeholder={!isFocus ? 'Select Branch' : '...'}
           searchPlaceholder="Search..."
-          value={value}
+          value={props.value}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           onChange={item => {
-            setValue(item.value);
+            props.setValue(item.label);
             setIsFocus(false);
           }}
          

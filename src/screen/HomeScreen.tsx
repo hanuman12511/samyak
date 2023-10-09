@@ -1,9 +1,8 @@
 import React,{useState,useEffect} from 'react'
 import {Text,View,StyleSheet,ScrollView,Image,TouchableOpacity} from 'react-native'
 import { images } from '../assets/image/images'
-import { useFocusEffect } from '@react-navigation/native'
 import DropDown from '../component/DropDown';
-
+import {course} from '../data/data'
 const data = [
     { label: 'Jhotwara', value: '1' },
     { label: 'Niwaru', value: '2' },
@@ -16,7 +15,13 @@ const data = [
   ];
 
 function HomeScreen(){
-    const[date ,setDate] = useState('')
+
+  const[date ,setDate] = useState('')
+    const [value, setValue] = useState(null);
+    const[isvaliduser ,setValidUser] = useState(false)
+    const[name ,setUserName] = useState("hanu")
+    const[addbatch ,setAddBatch] = useState('')
+    const[batch ,setBatch] = useState(false)
     useEffect(()=>{
        
         const interval = setInterval(() => {
@@ -26,8 +31,37 @@ function HomeScreen(){
 
 
     },[])
+    const userlogin=()=>{
+      setValidUser(true)
+    }
+  const userlogout=()=>{
+      alert("Logout")
+      setValidUser(false)
+    }
+  
+    const onpressbatch=()=>{
     
-    return(
+      setBatch(true)
+    }
+
+  const onPressValue=(branch:any)=>{
+    let branchnme =[]
+      course.map(bar=>{
+        Object.keys(bar).map(d=>{
+           if(d===branch){
+           branchnme.push(bar[d])
+           }
+          })
+        })
+    branchnme[0].map(d=>{
+        if(name == Object.keys(d)){
+          setAddBatch(d[name]);
+      }
+  })
+  setValue(branch)
+}
+
+ return(
         <View style={styles.container}>
             <View style={styles.profileview}>
             <View style={styles.profileviewleft}>
@@ -36,7 +70,7 @@ function HomeScreen(){
                 
             <View style={styles.profileviewcenter}>
                 <Text>WellCome</Text>     
-                <Text>Hanuman</Text>     
+                <Text>{name}</Text>     
                 </View> 
                 
             <View style={styles.profileviewright}>
@@ -54,24 +88,62 @@ function HomeScreen(){
             <View style={styles.branchview}>
             <DropDown
             data={data}
+            value={value}
+            setValue={(value:any)=>onPressValue(value)}
             />
             <View style={styles.showbatchview}>
                 
-            <View style={styles.branchlogin}>
-                <Text style={styles.branchname}>Jhotwara</Text>
-                <TouchableOpacity style={styles.onpresslogin}>
-                    <Text>Login</Text>
+           {value&& 
+           <View style={styles.branchlogin}>
+             <View style={styles.branchloginin}>
+                <Text style={styles.branchname}>{value}</Text>
+               { !isvaliduser?
+                <TouchableOpacity style={styles.onpresslogin} onPress={userlogin}>
+                    <Text style={{fontWeight:'bold'}}>Login</Text>
                 </TouchableOpacity>
+                :
+                <TouchableOpacity style={styles.onpresslogin} onPress={userlogout}>
+                    <Text style={{fontWeight:'bold'}}>Log-Out</Text>
+                </TouchableOpacity>
+               
+                }
+                </View>
+                  {isvaliduser&&
+                <View>
+                  <View style={{width:'100%',height:1,backgroundColor:'gray',marginTop:10}}/> 
+                    <View style={{paddingHorizontal:20,paddingVertical:20}}>
+                      <TouchableOpacity style={styles.batchonpress} onPress={onpressbatch}>
+                        <Text style={styles.batchname}>Show All Batch</Text>
+                      </TouchableOpacity>
+                    </View>
+                 </View>
+                 }
             </View>
+            }
             
-            <View style={styles.showbatchview}>
+           {batch&& <View style={styles.showbatch}>
+           <View style={styles.showbatchview1}>
+             <Text style={styles.title}>{'Course'}</Text>
+             <Text style={styles.title}>{'Time'}</Text>
+             <Text style={styles.title}>{'Num Of Stu.'}</Text>
+            
+            </View>
+             {addbatch.map(d=>(
+              <View style={styles.showbatchview1}>
+            <Text style={styles.title}>{d.course}</Text>
+            <Text style={styles.title}>{d.time}</Text>
+            <Text style={styles.title}>{d.numofstudents}</Text>
+            </View>
+             ))
+          
+          }
+          </View>
+          }
+            </View>
+           
 
             </View>
-            </View>
-              
-
-            </View>
-
+          
         </View>
     )
 }
@@ -123,27 +195,57 @@ marginLeft:10
 },
 
 showbatchview:{
-    flex:1
+    flex:1,
+  },
+  showbatch:{
+    borderRadius:20,
+  marginVertical:10,
+  marginHorizontal:10,
+  paddingHorizontal:20,
+  paddingVertical:20,
+    backgroundColor:'gray',
+   
+    justifyContent:'space-between'
+  },
+showbatchview1:{
+  borderRadius:20,
+  paddingHorizontal:20,
+  paddingVertical:5,
+  backgroundColor:'gray',
+  flexDirection:'row',
+  justifyContent:'space-between'
 },
 branchlogin:{
-  marginHorizontal:15,
-     flexDirection:'row',
-     paddingHorizontal:20,
-     backgroundColor:'red',
-     borderRadius:20
+
+ backgroundColor:'red',
+ marginHorizontal:15,
+ borderRadius:20
 },
+branchloginin:{
+     flexDirection:'row',
+     paddingHorizontal:30,
+    },
 onpresslogin:{
     flex:1,
-   
-    paddingVertical:20,
-    
-    justifyContent:'center'
+    marginVertical:10,
+    backgroundColor:'#fff',
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:30,
+},
+batchonpress:{
+  justifyContent:'center',
+  alignItems:'center',
+ 
 },
 branchname:{
     flex:1,
      alignItems:'center',
     paddingVertical:20,
-    justifyContent:'center'
+    justifyContent:'center',
+    color:'#fff',
+    fontWeight:'bold',
+    fontSize:20
 },
 
   profileviewleft:{
@@ -180,5 +282,13 @@ branchname:{
     backgroundColor:'#fff',
     borderRadius:20,
     paddingVertical:20
+  },
+  batchname:{
+    color:'#fff',
+    fontSize:20
+  },
+  title:{
+    fontWeight:'bold',
+    color:'#fff'
   }
 })
