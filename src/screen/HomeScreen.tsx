@@ -21,11 +21,7 @@ function HomeScreen(){
  const alldata= useContext(Context)
 
 
-const {batchshow,visitbranch} = alldata
-console.log(batchshow);
-console.log(visitbranch);
-
-
+const {batchshow,visitbranch}:any = alldata
   const[date ,setDate] = useState('')
     const [value, setValue] = useState(null);
     const[isvaliduser ,setValidUser] = useState(false)
@@ -33,7 +29,12 @@ console.log(visitbranch);
     const[addbatch ,setAddBatch] = useState('')
     const[batch ,setBatch] = useState(false)
     const[branchname ,setBranchName] = useState('')
+    const[dropbranchname ,setDropBranchName] = useState('')
     const[visitbranchname ,setVisitBranchName] = useState('')
+    const[intime ,setInTime] = useState('')
+    const[outtime ,setOutTime] = useState('')
+   
+   
     useEffect(()=>{
        
     /*     const interval = setInterval(() => {
@@ -44,37 +45,50 @@ console.log(visitbranch);
 
     },[])
 
-    useEffect(()=>{
-      BranchData()
-    },[])
+
 function BranchData(){
 let data1 =data
  visitbranch.map(d=>{
    let ddata=[]
     data1.map(dd=>{
-    if(d!==dd.label){
+    if(d.name!==dd.label){
       ddata.push(dd)
     }
    })
    data1=ddata
   })
-  console.log("brannnn=>",data1);
-
-
-
-  setBranchName(data1) 
-
+   setBranchName(data1) 
 }
 
 
 
-    const userlogin=()=>{
+const userlogin=()=>{
       setValidUser(true)
+      const d = new Date();
+      let hour = d.getHours();
+      let minutes = d.getMinutes();
+      let time=hour+":"+minutes
+      setInTime(time)
+
     }
+
+
+
   const userlogout=()=>{
+    const d = new Date();
+    let hour = d.getHours();
+    let minutes = d.getMinutes();
+    let time=hour+":"+minutes
+    setOutTime(time)
       alert("Logout")
+      let datavisit = {"name":dropbranchname,"in":intime,"out":outtime}
+      console.log("=>>>",datavisit);
+      
+      visitbranch.push(datavisit)
       BranchData()
       setValidUser(false)
+      setValue(null)
+     
     }
   
     const onpressbatch=()=>{
@@ -85,7 +99,7 @@ let data1 =data
 
   const onPressValue=(branch:any)=>{
     console.log("====",branch);
-    visitbranch.push(branch)
+    setDropBranchName(branch)
  
    let branchnme =[]
       course.map(bar=>{
@@ -95,16 +109,16 @@ let data1 =data
            }
           })
         })
-    branchnme[0].map(d=>{
+  /*   branchnme[0].map(d=>{
         if(name == Object.keys(d)){
           setAddBatch(d[name]);
       }
-  })
+  }) */
   setValue(branch)
 }
 
 
-console.log(branchname);
+
 
 
  return(
@@ -131,7 +145,16 @@ console.log(branchname);
                 <Text style={styles.hours}>12 Hours</Text>
             </View>
             </View>
-            <View style={{height:30,width:"100%",backgroundColor:'red'}}>
+            <View style={{flexDirection:'row',marginHorizontal:10}}>
+            <ScrollView horizontal={true}>
+            {visitbranch&&visitbranch.map(d=>(
+             <View style={{ borderColor:'gray',borderWidth:1, paddingVertical:10,padding:10,marginHorizontal:4,borderRadius:10}}> 
+             <Text>{d.name}</Text>
+             <Text>In:{intime}</Text>
+             <Text>Out:{outtime}</Text>
+             </View>
+            ))}
+            </ScrollView>
               </View>
           <View style={styles.branchview}>
             <DropDown
