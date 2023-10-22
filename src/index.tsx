@@ -6,12 +6,15 @@ import 'react-native-gesture-handler';
 import SplashScreen from 'react-native-splash-screen';
 import HomeScreen from './screen/HomeScreen';
 import ToastScreen from './utils/ToastScreen';
-import { batchshow } from './data/data';
+import { batchshow, visitbranch } from './data/data';
 import {Context} from './utils/Context'
+const alldata={
+  batchshow:batchshow, visitbranch:visitbranch
+}
 export default function App() {
   return (
     <SafeAreaView style={{backgroundColor:'red',flex:1}}>
-      <Context.Provider value={batchshow}>
+      <Context.Provider value={alldata}>
         <NavigationContainer
           onReady={() => {
            

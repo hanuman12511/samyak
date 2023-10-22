@@ -18,42 +18,76 @@ const data = [
 
 function HomeScreen(){
 
+ const alldata= useContext(Context)
 
-const batchshow = useContext(Context)
-console.log('====================================');
-console.log("=>>",batchshow);
-console.log('====================================');
+
+const {batchshow,visitbranch} = alldata
+console.log(batchshow);
+console.log(visitbranch);
+
+
   const[date ,setDate] = useState('')
     const [value, setValue] = useState(null);
     const[isvaliduser ,setValidUser] = useState(false)
     const[name ,setUserName] = useState("hanu")
     const[addbatch ,setAddBatch] = useState('')
     const[batch ,setBatch] = useState(false)
+    const[branchname ,setBranchName] = useState('')
+    const[visitbranchname ,setVisitBranchName] = useState('')
     useEffect(()=>{
        
-        const interval = setInterval(() => {
+    /*     const interval = setInterval(() => {
             setDate(new Date().toLocaleString());
           }, 1000);
-          return () => clearInterval(interval);
+          return () => clearInterval(interval); */
 
 
     },[])
+
+    useEffect(()=>{
+      BranchData()
+    },[])
+function BranchData(){
+let data1 =data
+ visitbranch.map(d=>{
+   let ddata=[]
+    data1.map(dd=>{
+    if(d!==dd.label){
+      ddata.push(dd)
+    }
+   })
+   data1=ddata
+  })
+  console.log("brannnn=>",data1);
+
+
+
+  setBranchName(data1) 
+
+}
+
+
+
     const userlogin=()=>{
       setValidUser(true)
     }
   const userlogout=()=>{
       alert("Logout")
+      BranchData()
       setValidUser(false)
     }
   
     const onpressbatch=()=>{
     
-      setBatch(true)
-      batchshow.push(addbatch)
+     /*  setBatch(true)
+      batchshow.push(addbatch) */
     }
 
   const onPressValue=(branch:any)=>{
-    let branchnme =[]
+    console.log("====",branch);
+    visitbranch.push(branch)
+ 
+   let branchnme =[]
       course.map(bar=>{
         Object.keys(bar).map(d=>{
            if(d===branch){
@@ -68,6 +102,10 @@ console.log('====================================');
   })
   setValue(branch)
 }
+
+
+console.log(branchname);
+
 
  return(
         <View style={styles.container}>
@@ -93,9 +131,11 @@ console.log('====================================');
                 <Text style={styles.hours}>12 Hours</Text>
             </View>
             </View>
-            <View style={styles.branchview}>
+            <View style={{height:30,width:"100%",backgroundColor:'red'}}>
+              </View>
+          <View style={styles.branchview}>
             <DropDown
-            data={data}
+            data={branchname?branchname:data}
             value={value}
             setValue={(value:any)=>onPressValue(value)}
             />
@@ -116,7 +156,7 @@ console.log('====================================');
                
                 }
                 </View>
-                  {isvaliduser&&
+                {isvaliduser&&
                 <View>
                   <View style={{width:'100%',height:1,backgroundColor:'gray',marginTop:10}}/> 
                     <View style={{paddingHorizontal:20,paddingVertical:20}}>
@@ -125,7 +165,7 @@ console.log('====================================');
                       </TouchableOpacity>
                     </View>
                  </View>
-                 }
+                 } 
             </View>
             }
             
