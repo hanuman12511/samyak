@@ -1,3 +1,5 @@
+
+export const batchshow=[]
 export const course =[
     {
         "Jhotwara":[

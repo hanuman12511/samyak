@@ -1,8 +1,10 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useContext} from 'react'
 import {Text,View,StyleSheet,ScrollView,Image,TouchableOpacity} from 'react-native'
 import { images } from '../assets/image/images'
 import DropDown from '../component/DropDown';
 import {course} from '../data/data'
+import { Context } from '../utils/Context';
+
 const data = [
     { label: 'Jhotwara', value: '1' },
     { label: 'Niwaru', value: '2' },
@@ -16,6 +18,11 @@ const data = [
 
 function HomeScreen(){
 
+
+const batchshow = useContext(Context)
+console.log('====================================');
+console.log("=>>",batchshow);
+console.log('====================================');
   const[date ,setDate] = useState('')
     const [value, setValue] = useState(null);
     const[isvaliduser ,setValidUser] = useState(false)
@@ -42,6 +49,7 @@ function HomeScreen(){
     const onpressbatch=()=>{
     
       setBatch(true)
+      batchshow.push(addbatch)
     }
 
   const onPressValue=(branch:any)=>{
