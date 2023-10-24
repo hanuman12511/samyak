@@ -1,6 +1,7 @@
 import React from 'react'
 import {Text,View,StyleSheet,Image,TextInput, TouchableOpacity} from 'react-native'
 import { images } from '../assets/image/images'
+import { colors } from '../assets/Color'
 
 
 interface PrimaryButtonProps {
@@ -30,7 +31,7 @@ const styles=StyleSheet.create({
         alignItems:'center',
         borderRadius:10,
         borderColor:'gray',
-        backgroundColor:'blue',
+        backgroundColor:colors.color1,
         justifyContent:'center',
         
     },

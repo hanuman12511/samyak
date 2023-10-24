@@ -4,7 +4,7 @@ import { images } from '../assets/image/images'
 import DropDown from '../component/DropDown';
 import {course} from '../data/data'
 import { Context } from '../utils/Context';
-
+import { colors } from '../assets/Color';
 const data = [
     { label: 'Jhotwara', value: '1' },
     { label: 'Niwaru', value: '2' },
@@ -33,6 +33,7 @@ const {batchshow,visitbranch}:any = alldata
     const[visitbranchname ,setVisitBranchName] = useState('')
     const[intime ,setInTime] = useState('')
     const[outtime ,setOutTime] = useState('')
+    const[totaltime ,setTotalTime] = useState('')
    
    
     useEffect(()=>{
@@ -73,22 +74,44 @@ const userlogin=()=>{
     }
 
 
+const TotalTimeCount=()=>{
+  console.log("visitbranch=>>>totaltime=>>",visitbranch);
+  let timeh=0
+  visitbranch.map(d=>{
+    timeh+=parseInt(d.out.split(':')[0])-parseInt(d.in.split(':')[0])
+    console.log(d.out.split(':')[0]);
+    console.log(d.in.split(':')[0]);
+    
+    
+  })
 
+  console.log(timeh);
+  setTotalTime(timeh)
+
+}
   const userlogout=()=>{
     const d = new Date();
     let hour = d.getHours();
     let minutes = d.getMinutes();
-    let time=hour+":"+minutes
-    setOutTime(time)
-      alert("Logout")
-      let datavisit = {"name":dropbranchname,"in":intime,"out":outtime}
-      console.log("=>>>",datavisit);
+  let time=''
+    if(hour.toString().length==1 ||minutes.toString().length==1){
+   
+    
+      time= String(hour).padStart(2, '0')+":"+String(minutes).padStart(2, '0')
       
-      visitbranch.push(datavisit)
-      BranchData()
-      setValidUser(false)
-      setValue(null)
-     
+    }
+    else{
+      time=hour+":"+minutes
+    
+    }
+    setOutTime(time)
+    let datavisit = {"name":dropbranchname,"in":intime,"out":time}
+    console.log("=>>>",datavisit);
+    visitbranch.push(datavisit)
+    BranchData()
+    setValidUser(false)
+    setValue(null)
+    TotalTimeCount()
     }
   
     const onpressbatch=()=>{
@@ -116,42 +139,42 @@ const userlogin=()=>{
   }) */
   setValue(branch)
 }
-
-
-
-
-
  return(
         <View style={styles.container}>
             <View style={styles.profileview}>
             <View style={styles.profileviewleft}>
-            <Image source={images.user} style={styles.profileimage}/>
+            <Image source={images.profile} style={styles.profileimage}/>
             </View> 
-                
-            <View style={styles.profileviewcenter}>
-                <Text>WellCome</Text>     
-                <Text>{name}</Text>     
+             <View style={styles.profileviewcenter}>
+                <Text style={{color:'#fff'}}>WellCome</Text>     
+                <Text style={{color:'#fff',fontSize:20}}>{name}</Text>     
                 </View> 
-                
-            <View style={styles.profileviewright}>
-            <Image source={images.notification} style={styles.notifyimage}/>
-           
-                </View> 
+             <View style={styles.profileviewright}>
+              <Image source={images.notification1} style={styles.notifyimage}/>
+             </View> 
             </View>
             <View style={styles.timeview}>
-            <Text>{date}</Text>
-            <View style={styles.workhours}>
+              <Text>{date}{totaltime}</Text>
+               <View style={styles.workhours}>
                 <Text style={styles.totaltext}>Total Work :</Text>
                 <Text style={styles.hours}>12 Hours</Text>
+              </View>
             </View>
-            </View>
-            <View style={{flexDirection:'row',marginHorizontal:10}}>
+
+            <View style={{flexDirection:'row',marginHorizontal:10,marginVertical:10}}>
             <ScrollView horizontal={true}>
             {visitbranch&&visitbranch.map(d=>(
-             <View style={{ borderColor:'gray',borderWidth:1, paddingVertical:10,padding:10,marginHorizontal:4,borderRadius:10}}> 
-             <Text>{d.name}</Text>
-             <Text>In:{intime}</Text>
-             <Text>Out:{outtime}</Text>
+             <View style={{ backgroundColor:colors.color1,borderColor:'gray',borderWidth:1, paddingVertical:10,padding:10,marginHorizontal:4,borderRadius:10}}> 
+             <Text style={{color:'#fff'}}>{d.name}</Text>
+             <View style={{flexDirection:'row'}}>
+                <Text style={{color:'#fff',flex:1}}>In :</Text>
+                <Text style={{color:'#fff',flex:1,textAlign:'right'}}>{d.in}</Text>
+             </View>
+            
+             <View style={{flexDirection:'row'}}>
+                <Text style={{color:'#fff',flex:1}}>Out :</Text>
+                <Text style={{color:'#fff',flex:1,textAlign:'right'}}>{d.out}</Text>
+             </View>
              </View>
             ))}
             </ScrollView>
@@ -225,6 +248,7 @@ export default HomeScreen
 const styles=StyleSheet.create({
     container:{
        flex:1,
+      backgroundColor:colors.color2
   },
   profileview:{
     flexDirection:'row',
@@ -242,7 +266,7 @@ const styles=StyleSheet.create({
     paddingHorizontal:10,
     paddingVertical:10,
     alignItems:'center',
-    borderRadius:30,
+    borderRadius:10,
     marginVertical:5,
     backgroundColor:'#fff',
   },
@@ -253,12 +277,12 @@ const styles=StyleSheet.create({
     justifyContent:'flex-end',
 },
 totaltext:{
-    color:'blue',
+   
     fontWeight:'bold'
 },
 
 hours:{
-    backgroundColor:'blue',
+    backgroundColor:colors.color1,
 color:'#fff',
 padding:10,
 borderRadius:20,
@@ -288,7 +312,7 @@ showbatchview1:{
 },
 branchlogin:{
 
- backgroundColor:'red',
+ backgroundColor:colors.color1,
  marginHorizontal:15,
  borderRadius:20
 },
@@ -339,7 +363,8 @@ branchname:{
   profileviewright:{
     borderRadius:50,
     borderWidth:2,
-    padding:5
+    padding:5,
+    borderColor:'#fff'
    
   },
   notifyimage:{

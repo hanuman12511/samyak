@@ -33,7 +33,7 @@ const onpresssignup=()=>{
 
     return(
         <View style={styles.container}>
-           
+          
              <KeyboardAwareScrollView>
              <View style={[styles.loginlogoview,styles.shadowProp]}>
                 <Image source={images.logoimage} style={styles.loginlogoimage}/>
@@ -85,6 +85,7 @@ const onpresssignup=()=>{
                 </View>
                 </View>
                 </KeyboardAwareScrollView>
+            
        </View>
       
     )
@@ -122,7 +123,7 @@ const styles=StyleSheet.create({
     formview:{
         flex:1,
         borderRadius:20,
-        backgroundColor:'#FBFAFA',
+        backgroundColor:'#EAEAEA',
         paddingHorizontal:10,
         paddingVertical:20,
         marginHorizontal:10
